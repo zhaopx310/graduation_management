@@ -37,8 +37,8 @@
                         <div class="col-sm-6 col-sm-offset-3 form-box">
                         	<div class="form-top">
                         		<div class="form-top-left">
-                        			<h3>登录到系统</h3>
-                            		<p>在下面输入编号与密码：</p>
+                        			<h3>管理员登录系统</h3>
+                            		<p>请在下面输入编号与密码：</p>
                         		</div>
                         		
                             </div>

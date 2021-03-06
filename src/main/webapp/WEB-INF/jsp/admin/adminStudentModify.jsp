@@ -61,9 +61,15 @@
 						<div class="col-sm-10">
 							<select class="form-control" id="grade" name="grade">
 								<option value="${grade }">${grade }</option>
-								<option value="2013级">2013级</option>
-								<option value="2014级">2014级</option>
+								<option value="2021级">2021级</option>
+								<option value="2020级">2020级</option>
+								<option value="2019级">2019级</option>
+								<option value="2018级">2018级</option>
+								<option value="2017级">2017级</option>
+								<option value="2016级">2016级</option>
 								<option value="2015级">2015级</option>
+								<option value="2014级">2014级</option>
+								<option value="2013级">2013级</option>
 							</select>
 						</div>
 					</div>

@@ -80,7 +80,7 @@
 					<div class="form-group">
 						<label for="firstname" class="col-sm-2 control-label">邮箱:</label>
 						<div class="col-sm-10">
-							<input type="number" class="form-control" id="email" name="email" onblur="verify();" >
+							<input type="text" class="form-control" id="email" name="email" onblur="verify();" >
 						</div>
 					</div>
 					
