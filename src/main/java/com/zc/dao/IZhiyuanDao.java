@@ -7,8 +7,8 @@ import com.zc.entity.Topic;
 import com.zc.entity.Zhiyuan;
 
 /**
- * @date 2018-4-12
- * @author zhangC
+ * @date 2021-3-12
+ * @author z
  * 获得所有的已选课题信息
  * 根据学生id获得选题信息
  * 添加选题信息

@@ -3,8 +3,8 @@ package com.zc.dao;
 import com.zc.entity.ThesisInformation;
 
 /**
- * @date 2018-4-17
- * @author zhangC
+ * @date 2021-3-17
+ * @author z
  * 添加学生提交论文信息
  * 通过学生提交论文信息
  * 未通过学生提交论文信息

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,9 @@ import com.zc.service.ITeacherService;
 
 @Service
 public class TeacherServiceImpl implements ITeacherService {
-	
+
+	private static final Logger log = Logger.getLogger(TeacherServiceImpl.class);
+
 	@Autowired
 	private ITeacherDao teacherDao;
 	
@@ -364,7 +367,7 @@ public class TeacherServiceImpl implements ITeacherService {
 	public int deleteTaskBookOpening(int thesisTitleId) {
 		// TODO Auto-generated method stub
 		int num = teacherTaskBookOpeningDao.deleteInfo(thesisTitleId);
-		System.out.println(num);
+		log.info(num);
 		return num;
 	}
 

@@ -6,7 +6,7 @@ import com.zc.entity.Department;
 
 /**
  * 
- * @author zhangC
+ * @author z
  * 
  * 显示院系列表
  * 根据id获得院系name

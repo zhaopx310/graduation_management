@@ -6,7 +6,7 @@ import com.zc.entity.Major;
 
 /**
  * 
- * @author zhangC
+ * @author z
  * 
  * 获得专业列表
  * 根据id获得专业name

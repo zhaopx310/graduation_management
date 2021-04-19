@@ -16,7 +16,7 @@ import com.zc.entity.Zhiyuan;
 
 /**
  * 
- * @author zhangC
+ * @author z
  * 添加学生
  * 学生列表
  * 根据id获得学生信息
@@ -30,8 +30,8 @@ import com.zc.entity.Zhiyuan;
  * 添加选题信息(提交学生的选题信息)
  * 删除选题信息(学生退选课题)
  * 
- * @date 2018-4-15
- * @author zhangC
+ * @date 2021-3-15
+ * @author z
  * 根据选题id 获得TeacherTaskBookOpening 信息
  * 根据学生id 获得StudentTaskBookOpening 信息
  * 上传任务书
@@ -42,8 +42,8 @@ import com.zc.entity.Zhiyuan;
  * 
  * 
  * 
- * @date 2018-4-17
- * @author zhangC
+ * @date 2021-3-17
+ * @author z
  * 根据课题id获得课题信息
  * 根据学生id获得阶段任务
  * 显示公告信息
@@ -52,12 +52,12 @@ import com.zc.entity.Zhiyuan;
  * 根据文件目录获得学生提交的论文信息
  * 根据学生id删除学生提交的论文信息
  * 
- * @date 2018-4-18
- * @author zhangC
+ * @date 2021-3-18
+ * @author z
  * 根据学生id 获得学生提交的论文信息(重复的)
  * 
- * @date 2018-5-9
- * @author zhangC
+ * @date 2021-3-9
+ * @author z
  * 添加学生提出的疑惑
  * 列出所有的疑惑
  *

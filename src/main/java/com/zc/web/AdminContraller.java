@@ -5,11 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,14 +16,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import com.zc.entity.Announcement;
 import com.zc.entity.Student;
-import com.zc.entity.StudentTaskBookOpening;
 import com.zc.entity.Teacher;
 import com.zc.entity.ThesisPaper;
 import com.zc.entity.ThesisTitle;
@@ -38,7 +34,7 @@ import com.zc.service.ITeacherService;
 
 /**
  * 
- * @author zhangC
+ * @author z
  * adminMainForm() 跳转到主页
  * adminModifyPassword() 跳转 修改密码
  * adminTeacherAdd() 跳转 教师添加
@@ -49,20 +45,20 @@ import com.zc.service.ITeacherService;
  * adminAnnouncement() 跳转 查看公告
  * adminPublishAnnouncement() 跳转 发布公告
  * 
- * @date 2018-4-8
- * @author zhangC
+ * @date 2021-3-8
+ * @author z
  * addTeacher() 添加教师到数据库中
  * adminShowAllTeacher() 显示教师
  * adminDeleteTeacher() 删除教师
  * adminModifyTeacher() 跳转到教师修改页面，改页面显示要修改的教师信息
  * adminModifyTeacherToDb() 把修改了的教师信息添加到数据库中
  * 
- * @date 2018-4-9
- * @author zhangC
+ * @date 2021-3-9
+ * @author z
  * adminShowTeacherOne() 显示查询到的教师信息
  * 
- * @date 2018-4-10
- * @author zhangC
+ * @date 2021-3-10
+ * @author z
  * addStudent() 添加学生
  * adminShowAllStudent() 显示所有学生信息
  * adminModifyStudent() 跳转到修改页面，便显示当前学生信息
@@ -70,19 +66,19 @@ import com.zc.service.ITeacherService;
  * adminDeleteStudent() 删除学生信息
  * adminShowStudentOne() 显示单个学生信息，用于页面查询到。
  * 
- * @date 2018-4-11
- * @author zhangC
+ * @date 2021-3-11
+ * @author z
  * adminCheckThesis() 修改了该方法，可以做到跳转页面的同时显示课题信息List
  * agreeThesis() 把课题审核通过 修改status属性
  * disgreeThesis() 课题不通过 
  * 
- * @date 2018-4-17
- * @author zhangC
+ * @date 2021-3-17
+ * @author z
  * adminPublishAnnouncement() 管理员发布公告
  * adminDeleteAnnouncement() 管理员删除公告
  * 
- * @date 2018-4-18
- * @author zhangC
+ * @date 2021-3-18
+ * @author z
  * adminShowThesisPaper() 管理员查看所有的最终论文
  * fileDownload() 文件下载
  *
@@ -91,7 +87,9 @@ import com.zc.service.ITeacherService;
 @Controller
 @RequestMapping(value="/admin")
 public class AdminContraller {
-	
+
+	private static final Logger log = Logger.getLogger(AdminContraller.class);
+
 	@Autowired
 	private ITeacherService teacherService;
 	
@@ -160,7 +158,7 @@ public class AdminContraller {
 		}
 		
 		model.addAttribute("thesisTitleList", thesisList);
-		System.out.println("查询到该所以的课题有："+thesisList);
+		log.info("查询到该所以的课题有："+thesisList);
 		
 		return "admin/adminCheckThesis.jsp";
 	}
@@ -220,7 +218,7 @@ public class AdminContraller {
 			teacher.setZhicheng(zhicheng);
 			
 			int addNum = teacherService.addTeacher(teacher);
-			// System.out.println("添加数目："+addNum);
+			// log.info("添加数目："+addNum);
 			model.addAttribute("message", "成功添加一条教师信息");
 			return "admin/adminTeacherAdd.jsp";
 		}
@@ -233,7 +231,7 @@ public class AdminContraller {
 	public String adminShowAllTeacher(Model model,HttpServletResponse response) throws Exception {
 		List<Teacher> teachers = teacherService.showAllTeacher();
 		for(int i=0;i<teachers.size();i++) {
-			System.out.println(teachers.get(i));
+			log.info(teachers.get(i));
 			int depmentId = teachers.get(i).getDepartmentId();
 			String departmentName = departmentService.getNameById(depmentId);
 			teachers.get(i).setDepartmentName(departmentName);
@@ -241,7 +239,7 @@ public class AdminContraller {
 		
 		
 		model.addAttribute("teacherList", teachers);
-		System.out.println("全部教师集合："+teachers);
+		log.info("全部教师集合："+teachers);
 		return "admin/adminTeacherManage.jsp";
 	}
 	
@@ -276,7 +274,7 @@ public class AdminContraller {
 			if(temp==1) {
 				list.set(0, list.get(0)+1);
 			}
-			System.out.println(list);
+			log.info(list);
 			
 		}
 		
@@ -286,9 +284,9 @@ public class AdminContraller {
 	
 	@RequestMapping(value="/deleteTeacher")
 	public String adminDeleteTeacher(int id,Model model) {
-		// System.out.println(id);
+		// log.info(id);
 		int num = teacherService.deleteTeacher(id);
-		// System.out.println("删除了"+num+"条数据！");
+		// log.info("删除了"+num+"条数据！");
 		model.addAttribute("message", "成功删除一条教师信息");
 		return "admin/adminTeacherManage.jsp";
 	}
@@ -319,7 +317,7 @@ public class AdminContraller {
 	
 	@RequestMapping(value="/modifyTeacherToDb")
 	public String adminModifyTeacherToDb(int id,Model model,HttpServletRequest request, String teacherNo,String departmentOld, String teacherName,String sex,String phone,String email,String zhicheng,String department) throws Exception {
-		// System.out.println(id);
+		// log.info(id);
 		
 		int departmentId = 0;
 		departmentOld = new String(departmentOld.getBytes("iso-8859-1"),"utf-8");
@@ -353,7 +351,7 @@ public class AdminContraller {
 		teacher.setZhicheng(zhicheng);
 		
 		int num = teacherService.updateTeacher(teacher);
-		System.out.println("修改数目："+num);
+		log.info("修改数目："+num);
 		return "forward:showAllTeacher";
 	}
 	
@@ -370,14 +368,14 @@ public class AdminContraller {
 			}else {
 				for(int i=0;i<teachers.size();i++) {
 					
-					System.out.println(teachers.get(i));
+					log.info(teachers.get(i));
 					int depmentId = teachers.get(i).getDepartmentId();
 					String departmentName = departmentService.getNameById(depmentId);
 					teachers.get(i).setDepartmentName(departmentName);
 				}
 			}
 			model.addAttribute("teacherList", teachers);
-			System.out.println("教师集合："+teachers);
+			log.info("教师集合："+teachers);
 			return "admin/adminTeacherManage.jsp";
 		}else if(("".equals(teacherNo) || teacherNo == null) && (!"".equals(teacherName) || teacherName != null)) {
 			teacherName = new String(teacherName.getBytes("iso-8859-1"),"utf-8");
@@ -386,14 +384,14 @@ public class AdminContraller {
 				model.addAttribute("showMessage", "没有与查询相匹配的教师信息");
 			}else {
 				for(int i=0;i<teachers.size();i++) {
-					System.out.println(teachers.get(i));
+					log.info(teachers.get(i));
 					int depmentId = teachers.get(i).getDepartmentId();
 					String departmentName = departmentService.getNameById(depmentId);
 					teachers.get(i).setDepartmentName(departmentName);
 				}
 			}
 			model.addAttribute("teacherList", teachers);
-			System.out.println("教师集合："+teachers);
+			log.info("教师集合："+teachers);
 			return "admin/adminTeacherManage.jsp";
 		} else {
 			teacherName = new String(teacherName.getBytes("iso-8859-1"),"utf-8");
@@ -403,7 +401,7 @@ public class AdminContraller {
 				model.addAttribute("showMessage", "没有与查询相匹配的教师信息");
 			}else {
 				for(int i=0;i<teachers.size();i++) {
-					System.out.println(teachers.get(i));
+					log.info(teachers.get(i));
 					int depmentId = teachers.get(i).getDepartmentId();
 					String departmentName = departmentService.getNameById(depmentId);
 					teachers.get(i).setDepartmentName(departmentName);
@@ -411,7 +409,7 @@ public class AdminContraller {
 			}
 			
 			model.addAttribute("teacherList", teachers);
-			System.out.println("教师集合："+teachers);
+			log.info("教师集合："+teachers);
 			return "admin/adminTeacherManage.jsp";
 		}
 		return "admin/adminTeacherManage.jsp";
@@ -452,7 +450,7 @@ public class AdminContraller {
 			student.setLastModifyTime(currentTime);
 			
 			int addNum = studentService.addStudent(student);
-			// System.out.println("添加数目："+addNum);
+			// log.info("添加数目："+addNum);
 			
 			model.addAttribute("message", "成功添加一条学生信息");
 			
@@ -468,7 +466,7 @@ public class AdminContraller {
 	public String adminShowAllStudent(Model model,HttpServletResponse response) throws Exception {
 		List<Student> students = studentService.showAllStudent();
 		for(int i=0;i<students.size();i++) {
-			System.out.println(students.get(i));
+			log.info(students.get(i));
 			int majorId = students.get(i).getMajorId();
 			String majorName = majorService.getNameById(majorId);
 			students.get(i).setMajorName(majorName);
@@ -476,7 +474,7 @@ public class AdminContraller {
 		
 		
 		model.addAttribute("studentList", students);
-		System.out.println("全部教师集合："+students);
+		log.info("全部教师集合："+students);
 		return "admin/adminStudentManage.jsp";
 	}
 	
@@ -507,7 +505,7 @@ public class AdminContraller {
 	
 	@RequestMapping(value="/modifyStudentToDb")
 	public String adminModifyStudentToDb(int id,Model model,HttpServletRequest request, String studentNo,String majorOld, String studentName,String sex,String phone,String email,String major,String grade) throws Exception {
-		// System.out.println(id);
+		// log.info(id);
 		
 		int majorId = 0;
 		majorOld = new String(majorOld.getBytes("iso-8859-1"),"utf-8");
@@ -556,15 +554,15 @@ public class AdminContraller {
 		
 		int num = studentService.updateStudent(student);
 		
-		System.out.println("修改数目："+num);
+		log.info("修改数目："+num);
 		return "forward:showAllStudent";
 	}
 	
 	@RequestMapping(value="/deleteStudent")
 	public String adminDeleteStudent(int id,Model model) {
-		// System.out.println(id);
+		// log.info(id);
 		int num = studentService.deleteStudent(id);
-		//System.out.println("删除了"+num+"条数据！");
+		//log.info("删除了"+num+"条数据！");
 		model.addAttribute("message", "成功删除一条学生信息");
 		return "admin/adminStudentManage.jsp";
 	}
@@ -587,7 +585,7 @@ public class AdminContraller {
 				}
 			}
 			model.addAttribute("studentList", students);
-			System.out.println("学生集合："+students);
+			log.info("学生集合："+students);
 			return "admin/adminStudentManage.jsp";
 		}else if(("".equals(studentNo) || studentNo == null) && (!"".equals(studentName) || studentName != null)) {
 			studentName = new String(studentName.getBytes("iso-8859-1"),"utf-8");
@@ -602,7 +600,7 @@ public class AdminContraller {
 				}
 			}
 			model.addAttribute("studentList", students);
-			System.out.println("学生集合："+students);
+			log.info("学生集合："+students);
 			return "admin/adminStudentManage.jsp";
 		} else {
 			studentName = new String(studentName.getBytes("iso-8859-1"),"utf-8");
@@ -619,7 +617,7 @@ public class AdminContraller {
 			}
 			
 			model.addAttribute("studentList", students);
-			System.out.println("学生集合："+students);
+			log.info("学生集合："+students);
 			return "admin/adminStudentManage.jsp";
 		}
 		return "admin/adminStudentManage.jsp";
@@ -630,7 +628,7 @@ public class AdminContraller {
 	public String agreeThesis(int id,Model model) {
 		
 		int num = teacherService.agreeThesisTitle(id);
-		System.out.println("课题已审核");
+		log.info("课题已审核");
 		adminCheckThesis(model);
 		return "admin/adminCheckThesis.jsp";
 	}
@@ -639,7 +637,7 @@ public class AdminContraller {
 	public String disgreeThesis(int id,Model model) {
 		
 		int num = teacherService.disagreeThesisTitle(id);
-		System.out.println("课题审核不通过");
+		log.info("课题审核不通过");
 		adminCheckThesis(model);
 		return "admin/adminCheckThesis.jsp";
 	}
@@ -660,7 +658,7 @@ public class AdminContraller {
 			an.setLastModifyTime(time);
 			
 			int num = announcementService.addAnnouncement(an);
-			System.out.println("添加公告"+num+"条");
+			log.info("添加公告"+num+"条");
 			model.addAttribute("message", "成功添加了一个条公告");
 			adminAnnouncement(model);
 			
@@ -672,7 +670,7 @@ public class AdminContraller {
 	@RequestMapping(value="/deleteAnnouncement")
 	public String adminDeleteAnnouncement(Model model,int id) throws Exception {
 		int num = announcementService.deleteAnnouncement(id);
-		System.out.println("删除公告"+num+"条");
+		log.info("删除公告"+num+"条");
 		
 		model.addAttribute("message", "删除一个条公告");
 		adminAnnouncement(model);

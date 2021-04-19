@@ -8,8 +8,8 @@ import org.apache.ibatis.annotations.Param;
 import com.zc.entity.StudentTaskBookOpening;
 
 /**
- * @date 2018-4-15
- * @author zhangC
+ * @date 2021-3-15
+ * @author z
  * 根据学生id 获得信息
  * 插入信息 只添加学生id
  * 通过学生id修改任务书路径

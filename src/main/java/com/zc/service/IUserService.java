@@ -4,7 +4,7 @@ import com.zc.entity.User;
 
 /**
  * 
- * @author zhangC
+ * @author z
  * 
  * 验证登陆
  * 根据no获得用户信息

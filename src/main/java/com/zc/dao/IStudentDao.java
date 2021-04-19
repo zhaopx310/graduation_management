@@ -7,8 +7,8 @@ import org.apache.ibatis.annotations.Param;
 import com.zc.entity.Student;
 
 /**
- * @date 2018-4-10
- * @author zhangC
+ * @date 2021-3-10
+ * @author z
  * 
  * 查询学生信息根据id
  * 添加学生
@@ -17,8 +17,8 @@ import com.zc.entity.Student;
  * 更新学生
  * 查询学生信息根据 编号、姓名、编号和姓名
  * 
- * @date 2018-4-12
- * @author zhangC
+ * @date 2021-3-12
+ * @author z
  * 根据no查询学生信息
  *
  */

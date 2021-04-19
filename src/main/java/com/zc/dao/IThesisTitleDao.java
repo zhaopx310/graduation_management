@@ -5,8 +5,8 @@ import java.util.List;
 import com.zc.entity.ThesisTitle;
 
 /**
- * @date 2018-4-11
- * @author zhangC
+ * @date 2021-3-11
+ * @author z
  * 添加课题
  * 根据教师id 查找课题List
  * 根据课题编号查找课题信息

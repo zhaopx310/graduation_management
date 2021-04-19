@@ -5,8 +5,8 @@ import java.util.List;
 import com.zc.entity.TeacherProgress;
 
 /**
- * @date 2018-4-17
- * @author zhangC
+ * @date 2021-3-17
+ * @author z
  * 添加进度信息
  * 通过进度
  * 未通过进度

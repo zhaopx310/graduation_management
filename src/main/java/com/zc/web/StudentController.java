@@ -2,19 +2,16 @@ package com.zc.web;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zc.entity.Announcement;
@@ -47,13 +43,13 @@ import com.zc.service.ITeacherService;
 
 /**
  * 
- * @author zhangC
+ * @author z
  * addStudentForm() 主页跳转到添加界面
  * addStudent() 添加学生   以废除
  * studentInfo() 学生修改个人信息跳转
  * 
- * @date 2018-4-6
- * @author zhangC 
+ * @date 2021-3-6
+ * @author z
  * @desc 都是跳转页面
  * studentMainForm() 跳转学生管理主页
  * studentMofidyInfoForm() 跳转学生 修改个人信息页
@@ -67,8 +63,8 @@ import com.zc.service.ITeacherService;
  * studentAnnouncement() 查看公共
  * studentScore() 查询成绩
  * 
- * @date 2018-4-12
- * @author zhangC
+ * @date 2021-3-12
+ * @author z
  * 修改了studentThesis() 页面可以显示当前学生的选题状况，若是选择了课题则直接跳转到主页。
  * 修改了studentThesisResult() 显示学生的选题情况，若是为选择课题则不能查询选题结果，会直接跳转到主页
  * studentModifyInfoToDb() 修改学生信息
@@ -76,8 +72,8 @@ import com.zc.service.ITeacherService;
  * studentSelectTopic() 提交当前学生的选题情况
  * studentDeleteChosenTopic() 学生退选当前课题
  * 
- * @date 2018-4-15
- * @author zhangC
+ * @date 2021-3-15
+ * @author z
  * 修改了studentViewTaskOpening() 页面，用于查看学生所选课题的开题报告和任务书，并下载
  * 修改了 studentResourcesDownload() 也main，显示学生上传的内容
  * fileDownload() 文件下载
@@ -86,23 +82,23 @@ import com.zc.service.ITeacherService;
  * fileDelete() 文件删除
  * studentOpeningResult() 学生查看自己开题报告的审核结果 (未提交--- 通过---- 不通过  )
  * 
- * @date 2018-4-16
- * @author zhangC
+ * @date 2021-3-16
+ * @author z
  * 修改了 studentSelectTopic() 方法 添加了 把选题信息保存到application 中，以便jsp页面的显示
  * getRealTimeTopic() 获得当前选题信息，并保存到application中
  * 
- * @date 2018-4-17
- * @author zhangC
+ * @date 2021-3-17
+ * @author z
  * 修改了studentResourcesDownload方法，可以显示上传为论文信息
  * 修改了fileDelete方法，可以删除上传的论文信息
  * studentUploadThesisInformation() 学生提交 学生论文信息
  * 
- * @date 2018-4-18
- * @author zhangC
+ * @date 2021-3-18
+ * @author z
  * studentQualification()  学生答辩资格的查看
  * 
- * @date 2018-5-9
- * @author zhangC
+ * @date 2021-3-9
+ * @author z
  * studentDoubtForm() 跳转到学生提出疑惑页面
  * studentDoubtListForm() 显示学生的疑惑，并查看是否有解决方案
  * studentDoubtToDb() 添加学生的疑惑道数据库
@@ -112,6 +108,8 @@ import com.zc.service.ITeacherService;
 @Controller
 @RequestMapping(value="/student")
 public class StudentController {
+
+	private static final Logger log = Logger.getLogger(StudentController.class);
 
 	@Autowired
 	private IStudentService studentService;
@@ -152,7 +150,7 @@ public class StudentController {
 		student.setLastModifyTime(currentTime);
 		
 		int addNum = studentService.addStudent(student);
-		System.out.println("添加数目："+addNum);
+		log.info("添加数目："+addNum);
 		
 		return "student/addSuccess.jsp";
 	}
@@ -192,10 +190,10 @@ public class StudentController {
 		//ThesisInformation topic2 = studentService.getInfoByStudentId(studentId);
 		if(topic == null || "".equals(topic)) {
 			model.addAttribute("thesisTitleList", thesisList);
-			System.out.println("查询到的课题有："+thesisList);
+			log.info("查询到的课题有："+thesisList);
 			return "student/studentThesis.jsp";
 		}else {
-			System.out.println(topic);
+			log.info(topic);
 			model.addAttribute("topicMessage", "你已选择课题，不可多选");
 			//model.addAttribute("Message", title.getThesisName());
 			
@@ -468,7 +466,7 @@ public class StudentController {
 		student.setEmail(email);
 		
 		int num = studentService.updateStudent(student);
-		System.out.println("修改学生数目："+num);
+		log.info("修改学生数目："+num);
 		
 		// 根据 院系id 获得专业name
 		int majId = student.getMajorId();
@@ -494,8 +492,8 @@ public class StudentController {
 	@RequestMapping(value="/selectTopic")
 	public String studentSelectTopic(HttpServletResponse response,HttpServletRequest request,Model model,int id,int topic) throws Exception {
 		
-		/*System.out.println("id:"+id);
-		System.out.println("topic:"+topic);*/
+		/*log.info("id:"+id);
+		log.info("topic:"+topic);*/
 		Topic top = new Topic();
 		top.setStudentId(id);
 		top.setThesisId(topic);
@@ -503,7 +501,7 @@ public class StudentController {
 		top.setSelectTime(time);
 		
 		int num = studentService.addTopicToDb(top);
-		System.out.println("添加了"+num+"个选题");
+		log.info("添加了"+num+"个选题");
 		
 		Student student = studentService.getStudentNameById(id);
 		String studentNo = student.getStudentNo();
@@ -531,8 +529,8 @@ public class StudentController {
 	@RequestMapping(value="/selectThesis")
 	public String studentSelectThesis(HttpServletResponse response,HttpServletRequest request,Model model,int id,int thesis) throws Exception {
 		
-		/*System.out.println("id:"+id);
-		System.out.println("topic:"+topic);*/
+		/*log.info("id:"+id);
+		log.info("topic:"+topic);*/
 		Zhiyuan zhi = studentService.chosenZhiyuan(id);
 		if(zhi == null || "".equals(zhi)) {
 			Zhiyuan zhiyuan = new Zhiyuan();
@@ -542,7 +540,7 @@ public class StudentController {
 			zhiyuan.setSelectTime(time);
 			
 			int num = studentService.addZhiyuanToDb(zhiyuan);
-			System.out.println("添加了"+num+"个志愿");
+			log.info("添加了"+num+"个志愿");
 			
 			Student student = studentService.getStudentNameById(id);
 			String studentNo = student.getStudentNo();
@@ -575,11 +573,11 @@ public class StudentController {
 	@RequestMapping(value="/deleteChosenTopic")
 	public String studentDeleteChosenTopic(Model model,int studentId) throws Exception {
 		
-		// System.out.println(studentId);
+		// log.info(studentId);
 		StudentTaskBookOpening stbo = studentService.getSTBOInfoById(studentId);
 		if(stbo==null||"".equals(stbo)) {
 			int num = studentService.deleteTopic(studentId); 
-			System.out.println("成功退选 :"+num+"条数据");
+			log.info("成功退选 :"+num+"条数据");
 			model.addAttribute("message", "成功退选");
 			
 			return "student/main.jsp";
@@ -591,8 +589,8 @@ public class StudentController {
 	
 	@RequestMapping(value="/fileDownload")
 	public ResponseEntity<byte[]> fileDownload(HttpServletRequest request, @RequestParam("filePath") String filePath,@RequestParam("fileName") String fileName, Model model) throws Exception {
-		System.out.println(fileName);
-		System.out.println(filePath);
+		log.info(fileName);
+		log.info(filePath);
 		//fileName = new String(fileName.getBytes("iso-8859-1"),"utf-8");
 		//filePath = new String(filePath.getBytes("iso-8859-1"),"utf-8");
 		File file = new File(filePath);
@@ -626,7 +624,7 @@ public class StudentController {
 			file.transferTo(new File(fileDb+File.separator+fileName));
 			
 			int num = studentService.uploadTaskBook(studentId, filePath.toString());
-			System.out.println("添加了"+num+"条信息");
+			log.info("添加了"+num+"条信息");
 			model.addAttribute("message", "上传任务书成功");
 			return "student/main.jsp";
 		}else {
@@ -663,7 +661,7 @@ public class StudentController {
 				file.transferTo(new File(fileDb+File.separator+fileName));
 				
 				int num = studentService.uploadOpening(studentId, filePath.toString());
-				System.out.println("添加了"+num+"条信息");
+				log.info("添加了"+num+"条信息");
 				
 				model.addAttribute("message", "上传开题报告成功");
 				return "student/main.jsp";
@@ -702,7 +700,7 @@ public class StudentController {
 				file.transferTo(new File(fileDb+File.separator+fileName));
 				
 				int num = studentService.uploadKexing(studentId, filePath.toString());
-				System.out.println("添加了"+num+"条信息");
+				log.info("添加了"+num+"条信息");
 				
 				model.addAttribute("message", "上传可行性分析报告成功");
 				return "student/main.jsp";
@@ -741,7 +739,7 @@ public class StudentController {
 				file.transferTo(new File(fileDb+File.separator+fileName));
 				
 				int num = studentService.uploadXuqiu(studentId, filePath.toString());
-				System.out.println("添加了"+num+"条信息");
+				log.info("添加了"+num+"条信息");
 				
 				model.addAttribute("message", "上传需求分析报告成功");
 				return "student/main.jsp";
@@ -780,7 +778,7 @@ public class StudentController {
 				file.transferTo(new File(fileDb+File.separator+fileName));
 				
 				int num = studentService.uploadGaiyao(studentId, filePath.toString());
-				System.out.println("添加了"+num+"条信息");
+				log.info("添加了"+num+"条信息");
 				
 				model.addAttribute("message", "上传概要设计报告成功");
 				return "student/main.jsp";
@@ -819,7 +817,7 @@ public class StudentController {
 				file.transferTo(new File(fileDb+File.separator+fileName));
 				
 				int num = studentService.uploadShujuku(studentId, filePath.toString());
-				System.out.println("添加了"+num+"条信息");
+				log.info("添加了"+num+"条信息");
 				
 				model.addAttribute("message", "上传数据库设计报告成功");
 				return "student/main.jsp";
@@ -859,7 +857,7 @@ public class StudentController {
 			
 		}else {
 			int num1 = studentService.deleteThesisInformation(studentId);
-			System.out.println("成功删除论文文件");
+			log.info("成功删除论文文件");
 		}
 		
 		StudentTaskBookOpening STBO = studentService.getInfoByTaskBookPath(filePath);
@@ -867,7 +865,7 @@ public class StudentController {
 			
 		}else {
 			int num = studentService.resetTaskBook(studentId);
-			System.out.println("成功删除任务书");
+			log.info("成功删除任务书");
 		}
 		
 		StudentTaskBookOpening STBO2 = studentService.getInfoByOpeningPath(filePath);
@@ -875,7 +873,7 @@ public class StudentController {
 			
 		}else {
 			int num = studentService.resetOpening(studentId);
-			System.out.println("成功删除开题报告");
+			log.info("成功删除开题报告");
 		}
 		
 		model.addAttribute("message", "成功删除一个文档");
@@ -928,7 +926,7 @@ public class StudentController {
 				model.addAttribute("message", "开题报告已通过");
 			}
 		}*/
-		System.out.println(wendangList);
+		log.info(wendangList);
 		if(wendangList==null) {
 			model.addAttribute("message", "还未提交任何文档");
 		}
@@ -981,7 +979,7 @@ public class StudentController {
 						file.transferTo(new File(fileDb+File.separator+fileName));
 						
 						int num = studentService.uploadThesisInformation(studentId, filePath.toString());
-						System.out.println("添加了"+num+"条信息");
+						log.info("添加了"+num+"条信息");
 						
 						model.addAttribute("message", "上传论文成功");
 						return "student/main.jsp";

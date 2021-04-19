@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,8 @@ import com.zc.service.IStudentService;
 
 @Service
 public class StudentServiceImpl implements IStudentService{
+
+	private static final Logger log = Logger.getLogger(StudentServiceImpl.class);
 
 	@Autowired
 	private IStudentDao studentDao;
@@ -132,7 +135,7 @@ public class StudentServiceImpl implements IStudentService{
 		
 		// 获得所有的课题List 包括 未审核、审核通过和审核不通过的
 		List<ThesisTitle> thesisList = thesisTitleDao.showAllThesisTitleAd();
-		//System.out.println("原始的List是："+thesisList);
+		//log.info("原始的List是："+thesisList);
 		//移除未审核和审核不通过的
 		
 		for(int i=0;i<thesisList.size();i++) {
@@ -140,7 +143,7 @@ public class StudentServiceImpl implements IStudentService{
 				thesisList.remove(i);
 			}
 		}
-		//System.out.println("修改后的List是："+thesisList);
+		//log.info("修改后的List是："+thesisList);
 		//移除thesisTitle中已被选的
 		List<Topic> topicList = topicDao.showAllTopic();
 		List<ThesisTitle> showList = new ArrayList<ThesisTitle>();
@@ -156,7 +159,7 @@ public class StudentServiceImpl implements IStudentService{
 			}
 			
 		}
-		System.out.println(showList);
+		log.info(showList);
 		return showList;
 	}
 

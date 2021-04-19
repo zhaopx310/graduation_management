@@ -4,12 +4,11 @@ package com.zc.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
 import com.zc.entity.Student;
 import com.zc.entity.Teacher;
 import com.zc.entity.User;
@@ -20,23 +19,25 @@ import com.zc.service.ITeacherService;
 import com.zc.service.IUserService;
 
 /**
- * @date 2018-4-6
- * @author zhangC
+ * @date 2021-3-6
+ * @author z
  * adminLogin() 管理员登陆
  * teacherLogin() 教师登陆
  * studentLogin() 学生登陆
  * quitSystem() 退出系统
  * modifyPassword() 修改密码，由于管理员，教师，学生的修改密码相同，所以只用一个controller作为修改。
  *
- * @date 2018-4-11
- * @author zhangC
+ * @date 2021-3-11
+ * @author z
  * 修改了teacherLogin() 方法，新增了查询教师信息的功能。并且写入session中。
  *
  */
 
 @Controller
 public class UserController {
-	
+
+	private static final Logger log = Logger.getLogger(UserController.class);
+
 	@Autowired
 	private IUserService userService;
 	
@@ -105,7 +106,7 @@ public class UserController {
 	public String studentLogin(String userNo,String password,Model model,HttpServletRequest request) {
 		
 		User currentUser = userService.login(userNo, password);
-		System.out.println(currentUser);
+		log.info(currentUser);
 		if("".equals(currentUser)||currentUser==null) {
 			model.addAttribute("message", "用户名或密码错误");
 			//model.addAttribute("url", "../student/studentLogin.jsp");
@@ -145,10 +146,10 @@ public class UserController {
 	@RequestMapping(value="/modifyPassword")
 	public String modifyPassword(Model model,String newPassword1,String currentUserNo) {
 		
-		/*System.out.println("新的密码："+newPassword1);
-		System.out.println("账户："+currentUserNo);*/
+		/*log.info("新的密码："+newPassword1);
+		log.info("账户："+currentUserNo);*/
 		int num = userService.modifyPassword(currentUserNo, newPassword1);
-		System.out.println("修改了"+num+"条数据");
+		log.info("修改了"+num+"条数据");
 		model.addAttribute("num", num);
 		return "modifySuccess.jsp";
 	}

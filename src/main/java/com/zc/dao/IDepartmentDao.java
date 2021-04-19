@@ -5,8 +5,8 @@ import java.util.List;
 import com.zc.entity.Department;
 
 /**
- * @date 2018-4-10
- * @author zhangC
+ * @date 2021-3-10
+ * @author z
  * 查询全部的院系
  * id ==> name
  * name ==> id

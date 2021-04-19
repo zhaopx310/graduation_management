@@ -8,8 +8,8 @@ import com.zc.entity.Teacher;
 
 /**
  * 
- * @date 2018-4-10
- * @author zhangC
+ * @date 2021-3-10
+ * @author z
  * 添加教师
  * 查询教师 根据id
  * 查询所有教师信息
@@ -17,8 +17,8 @@ import com.zc.entity.Teacher;
  * 更新教师
  * 查询教师信息 根据 编号、姓名、编号和姓名
  * 
- * @date 2018-4-11
- * @author zhangC
+ * @date 2021-3-11
+ * @author z
  * 查询教师的信息 根据教师no
  * 
  *
