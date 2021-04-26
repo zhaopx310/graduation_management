@@ -21,6 +21,11 @@
 	<select id="getInfoByStudentId" parameterType="int" resultType="ThesisInformation">
 		select * from t_thesis_information where studentId=#{studentId}
 	</select>
+
+	<!--学生查询 提交毕业论文-->
+	<select id="getInfoByStudentIdList" parameterType="int" resultType="ThesisInformation">
+		select * from t_thesis_information where studentId=#{studentId} and status=2
+	</select>
 	
 	<select id="getInfoByFilePath" parameterType="String" resultType="ThesisInformation">
 		select * from t_thesis_information where thesisText=#{thesisText}

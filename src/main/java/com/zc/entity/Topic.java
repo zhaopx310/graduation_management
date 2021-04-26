@@ -2,6 +2,7 @@ package com.zc.entity;
 
 import java.util.Date;
 
+//选题信息表
 public class Topic {
 	private int id;
 	private int thesisId;

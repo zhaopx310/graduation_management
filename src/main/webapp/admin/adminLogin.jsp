@@ -38,7 +38,7 @@
                         	<div class="form-top">
                         		<div class="form-top-left">
                         			<h3>管理员登录系统</h3>
-                            		<p>请在下面输入编号与密码：</p>
+                            		<p>请在下面输入管理员编号与密码：</p>
                         		</div>
                         		
                             </div>

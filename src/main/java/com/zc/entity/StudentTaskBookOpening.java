@@ -1,5 +1,6 @@
 package com.zc.entity;
 
+//学生提交开题报告和任务书 表
 public class StudentTaskBookOpening {
 	
 	private int id;

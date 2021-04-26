@@ -275,7 +275,7 @@ public class StudentServiceImpl implements IStudentService{
 		return STBO;
 	}
 
-
+    //学生查询 开题报告和任务书
 	public Map<String, String> getTaskBookOpeningToMap(int studentId) {
 		// TODO Auto-generated method stub
 		Map<String, String> fileList = new HashMap<String, String>();
@@ -409,11 +409,9 @@ public class StudentServiceImpl implements IStudentService{
 		return num;
 	}
 
-
-	public ThesisInformation getInfoByStudentId(int studentId) {
-		// TODO Auto-generated method stub
-		
-		ThesisInformation thesis = thesisInformationDao.getInfoByStudentId(studentId);
+	//学生查询 提交毕业论文
+	public List<ThesisInformation> getInfoByStudentId(int studentId) {
+		List<ThesisInformation> thesis = thesisInformationDao.getInfoByStudentIdList(studentId);
 		return thesis;
 	}
 
@@ -434,9 +432,9 @@ public class StudentServiceImpl implements IStudentService{
 	}
 
 
-	public ThesisInformation getThesisInforInfoByStudentId(int studentId) {
+	public List<ThesisInformation> getThesisInforInfoByStudentId(int studentId) {
 		// TODO Auto-generated method stub
-		ThesisInformation thesisInfo = thesisInformationDao.getInfoByStudentId(studentId);
+		List<ThesisInformation> thesisInfo = thesisInformationDao.getInfoByStudentIdList(studentId);
 		
 		return thesisInfo;
 	}

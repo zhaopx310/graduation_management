@@ -360,28 +360,30 @@ public class StudentController {
 	public String studentUploadFile() {
 		return "student/studentUploadFile.jsp";
 	}
-	
+
+	//学生-文档管理-查看已上传的文档
 	@RequestMapping(value="/resourcesDownload")
 	public String studentResourcesDownload(HttpServletRequest request,Model model) {
-		
 		Student currentUser = (Student)request.getSession().getAttribute("student");
 		int studentId = currentUser.getId();
-		
-		
+		//学生查询 开题报告和任务书
 		Map<String, String> fileList = studentService.getTaskBookOpeningToMap(studentId);
 		if(fileList.isEmpty()) {
 			return "student/studentResourcesDownload.jsp";
 		}else {
-			ThesisInformation thesisInformation4Db = studentService.getInfoByStudentId(studentId);
-			if(thesisInformation4Db ==null) {
-				
-			}else {
-				String filePath = thesisInformation4Db.getThesisText();
-				String[] str = filePath.split("\\\\");
-				String fileName = str[str.length-1].toString();
-				fileList.put(fileName, filePath);
+            //学生查询 提交毕业论文
+			List<ThesisInformation> thesisInformation4Db = studentService.getInfoByStudentId(studentId);
+			for (int i = 0; i <thesisInformation4Db.size() ; i++) {
+				ThesisInformation thesisInformation = thesisInformation4Db.get(i);
+				if(thesisInformation ==null) {
+                log.info("学生-毕业论文为空："+ thesisInformation);
+				}else {
+					String filePath = thesisInformation.getThesisText();
+					String[] str = filePath.split("\\\\");
+					String fileName = str[str.length-1].toString();
+					fileList.put(fileName, filePath);
+				}
 			}
-			
 			model.addAttribute("fileList", fileList);
 			return "student/studentResourcesDownload.jsp";
 		}
@@ -589,6 +591,7 @@ public class StudentController {
 	
 	@RequestMapping(value="/fileDownload")
 	public ResponseEntity<byte[]> fileDownload(HttpServletRequest request, @RequestParam("filePath") String filePath,@RequestParam("fileName") String fileName, Model model) throws Exception {
+		request.setCharacterEncoding("utf-8");
 		log.info(fileName);
 		log.info(filePath);
 		//fileName = new String(fileName.getBytes("iso-8859-1"),"utf-8");
@@ -1009,21 +1012,26 @@ public class StudentController {
 		Student currentUser = (Student)request.getSession().getAttribute("student");
 		int studentId = currentUser.getId();
 		
-		ThesisInformation thesis = studentService.getThesisInforInfoByStudentId(studentId);
-		
-		if(thesis == null || "".equals(thesis)) {
-			model.addAttribute("message", "不具备答辩资格");
-		}else {
-			int status = thesis.getStatus();
-			if(status == 0) {
-				model.addAttribute("message", "不具备答辩资格");
-			}else if(status == 1) {
+		//ThesisInformation thesis = studentService.getThesisInforInfoByStudentId(studentId);
+		List<ThesisInformation> thesis = studentService.getThesisInforInfoByStudentId(studentId);
+		for (int i = 0; i <thesis.size() ; i++) {
+			ThesisInformation thesisInformation = thesis.get(i);
+			if(thesisInformation == null) {
 				model.addAttribute("message", "不具备答辩资格");
 			}else {
-				model.addAttribute("message", "你已具备答辩资格");
+				int status = thesisInformation.getStatus();
+				if(status == 0) {
+					model.addAttribute("message", "不具备答辩资格");
+				}else if(status == 1) {
+					model.addAttribute("message", "不具备答辩资格");
+				}else {
+					model.addAttribute("message", "你已具备答辩资格");
+				}
+
 			}
-			
 		}
+
+
 		return "student/studentQualifications.jsp";
 	}
 	

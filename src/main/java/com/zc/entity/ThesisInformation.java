@@ -1,5 +1,6 @@
 package com.zc.entity;
 
+//学生提交毕业论文 表
 public class ThesisInformation {
 	private int id;
 	private int studentId;

@@ -105,7 +105,8 @@ public interface IStudentService {
 	int uploadGaiyao(int studentId,String filePath);
 	
 	int uploadShujuku(int studentId,String filePath);
-	
+
+	//学生查询 开题报告和任务书
 	Map<String, String> getTaskBookOpeningToMap(int studentId);
 	
 	int resetTaskBook(int studentId);
@@ -124,16 +125,19 @@ public interface IStudentService {
 	List<Announcement> showAllAnnouncement();
 	
 	int uploadThesisInformation(int studentId,String filePath);
-	
-	ThesisInformation getInfoByStudentId(int studentId);
-	
+
+	//学生查询 提交毕业论文
+	//ThesisInformation getInfoByStudentId(int studentId);
+	List<ThesisInformation> getInfoByStudentId(int studentId);
+
 	ThesisInformation getInfoByFilePath(String filePath);
 	
 	int deleteThesisInformation(int studentId);
 	
 	
-	ThesisInformation getThesisInforInfoByStudentId(int studentId);
-	
+	//ThesisInformation getThesisInforInfoByStudentId(int studentId);
+	List<ThesisInformation> getThesisInforInfoByStudentId(int studentId);
+
 	
 	int addDoubt(Doubt doubt);
 	

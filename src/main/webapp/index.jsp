@@ -9,7 +9,7 @@
 <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
  	body{        
- 	    background-image: url(images/3.jpg);
+ 	    background-image: url(images/home.jpg);
  	    background-repeat:no-repeat; 
     	background-size:100% 100%;
     	-moz-background-size:100% 100%;

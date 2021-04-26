@@ -23,7 +23,8 @@ import com.zc.entity.StudentTaskBookOpening;
  */
 
 public interface IStudentTaskBookOpeningDao {
-	
+
+	//学生查询 开题报告和任务书
 	StudentTaskBookOpening showInfoByStudentId(int studentId);
 	
 	int addInfoByStudentId(int studentId);

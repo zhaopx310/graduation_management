@@ -2,6 +2,8 @@ package com.zc.dao;
 
 import com.zc.entity.ThesisInformation;
 
+import java.util.List;
+
 /**
  * @date 2021-3-17
  * @author z
@@ -22,8 +24,10 @@ public interface IThesisInformationDao {
 	int failThesisInformation(int studentId);
 	
 	int deleteThesisInformation(int studentId);
-	
+
+	//学生查询 提交毕业论文
 	ThesisInformation getInfoByStudentId(int studentId);
-	
+	List<ThesisInformation> getInfoByStudentIdList(int studentId);
+
 	ThesisInformation getInfoByFilePath(String thesisText);
 }

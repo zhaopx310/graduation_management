@@ -38,7 +38,7 @@
                         	<div class="form-top">
                         		<div class="form-top-left">
                         			<h3>教师登录系统</h3>
-                            		<p>请在下面输入编号与密码：</p>
+                            		<p>请在下面输入教师编号与密码：</p>
                         		</div>
                         		
                             </div>
