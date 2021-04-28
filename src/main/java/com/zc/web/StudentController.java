@@ -174,20 +174,17 @@ public class StudentController {
 	public String studentMofidyPasswordForm() {
 		return "student/studentModifyPassword.jsp";
 	}
-	
+
+	//学生-课题管理-选择课题
 	@RequestMapping(value="/thesis",method=RequestMethod.GET)
 	public String studentThesis(HttpServletResponse response,HttpServletRequest request,Model model) {
 		User currentUser = (User)request.getSession().getAttribute("currentUser");
 		String userNo = currentUser.getUserNo();
 		//获取所有课题
 		List<ThesisTitle> thesisList = teacherService.showAllThesisTitle();
-		
 		Student student = studentService.getStudentByNO(userNo);
 		int studentId = student.getId();
 		Topic topic = studentService.chosenThesisTitle(studentId);
-		//ThesisTitle title = teacherService.getThesisInfoByThesisId(topic.getThesisId());
-		
-		//ThesisInformation topic2 = studentService.getInfoByStudentId(studentId);
 		if(topic == null || "".equals(topic)) {
 			model.addAttribute("thesisTitleList", thesisList);
 			log.info("查询到的课题有："+thesisList);
@@ -195,13 +192,8 @@ public class StudentController {
 		}else {
 			log.info(topic);
 			model.addAttribute("topicMessage", "你已选择课题，不可多选");
-			//model.addAttribute("Message", title.getThesisName());
-			
 			return "student/main.jsp";
 		}
-		
-		
-		
 	}
 	
 	@RequestMapping(value="/thesisResult",method=RequestMethod.GET)
@@ -635,37 +627,38 @@ public class StudentController {
 			return "error.jsp";
 		}
 	}
-	
+
+	//上传开题报告
 	@RequestMapping(value="/uploadOpening")
 	public String studentUploadOpening(HttpServletRequest request, Model model,@RequestParam("file") MultipartFile file) throws Exception {
-		
+
 		Student currentUser = (Student)request.getSession().getAttribute("student");
 		int studentId = currentUser.getId();
-		
+
 		String studentIdToString = String.valueOf(studentId);
-		
+
 		Topic topic = studentService.chosenThesisTitle(studentId);
 		if(topic == null || "".equals(topic)) {
 			model.addAttribute("message", "无法上传开题报告");
 			return "student/main.jsp";
 		}else {
 			if(!file.isEmpty()) {
-				
+
 				File fileRoot = new File("E:\\BSM\\student");
 				File fileDb = new File(fileRoot, studentIdToString);
 				String fileName = file.getOriginalFilename();
-				
+
 				File filePath = new File(fileDb, fileName);
-				
+
 				if(!filePath.getParentFile().exists()) {
 					filePath.getParentFile().mkdirs();
 				}
-				
+
 				file.transferTo(new File(fileDb+File.separator+fileName));
-				
+
 				int num = studentService.uploadOpening(studentId, filePath.toString());
 				log.info("添加了"+num+"条信息");
-				
+
 				model.addAttribute("message", "上传开题报告成功");
 				return "student/main.jsp";
 			}else {

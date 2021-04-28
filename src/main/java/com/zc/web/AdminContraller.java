@@ -182,30 +182,24 @@ public class AdminContraller {
 	public String adminPublishAnnouncement() {
 		return "admin/adminPublishAnnouncement.jsp";
 	}
-	
+
+	//管理员-导师管理-添加导师
 	@RequestMapping(value="/teacherAdd",method=RequestMethod.POST)
 	public String addTeacher(HttpServletRequest request, String teacherNo, String teacherName,String sex,String phone,String email,String zhicheng,String department,Model model) throws Exception {
 		teacherNo = new String(teacherNo.getBytes("iso-8859-1"),"utf-8");
 		teacherName = new String(teacherName.getBytes("iso-8859-1"),"utf-8");
 		sex = new String(sex.getBytes("iso-8859-1"),"utf-8");
-		//String inputMan = (String) session.getAttribute("currentUser");
-		
 		User user = (User)request.getSession().getAttribute("currentUser");
 		String inputMan = user.getUserNo();
-		
-		// String inputMan = (String) request.getSession().getAttribute("currentUser.userNo");
-		// inputMan = new String(inputMan.getBytes("iso-8859-1"),"utf-8");
 		phone = new String(phone.getBytes("iso-8859-1"),"utf-8");
 		email = new String(email.getBytes("iso-8859-1"),"utf-8");
 		zhicheng = new String(zhicheng.getBytes("iso-8859-1"),"utf-8");
 		department = new String(department.getBytes("iso-8859-1"),"utf-8");
-		
 		if(teacherNo == null || "".equals(teacherNo) || teacherName == null || "".equals(teacherName)|| sex == null || "".equals(sex) || phone == null || "".equals(phone) || department == null || "".equals(department)  ) {
 			model.addAttribute("message", "存在未填写的信息");
 			return "admin/main.jsp";
 		}else {
 			Date currentTime = new Date();
-			
 			Teacher teacher = new Teacher();
 			teacher.setTeacherNo(teacherNo);
 			teacher.setTeacherName(teacherName);
@@ -354,11 +348,11 @@ public class AdminContraller {
 		log.info("修改数目："+num);
 		return "forward:showAllTeacher";
 	}
-	
-	
+
+
+	//管理员-导师管理-导师操作-搜索老师
 	@RequestMapping(value="/showTeacherOne",method=RequestMethod.POST)
 	public String adminShowTeacherOne(Model model,HttpServletResponse response, @RequestParam(value="teacherNo",required=false) String teacherNo,@RequestParam(value="teacherName",required=false) String teacherName) throws Exception {
-		
 		if( ("".equals(teacherNo) || teacherNo == null) && ("".equals(teacherName) || teacherName == null) ) {
 			adminShowAllTeacher(model, response);
 		}else if((!"".equals(teacherNo) || teacherNo != null) &&("".equals(teacherName) || teacherName == null) ) {
@@ -367,7 +361,6 @@ public class AdminContraller {
 				model.addAttribute("showMessage", "没有与查询相匹配的教师信息");
 			}else {
 				for(int i=0;i<teachers.size();i++) {
-					
 					log.info(teachers.get(i));
 					int depmentId = teachers.get(i).getDepartmentId();
 					String departmentName = departmentService.getNameById(depmentId);
@@ -407,7 +400,6 @@ public class AdminContraller {
 					teachers.get(i).setDepartmentName(departmentName);
 				}
 			}
-			
 			model.addAttribute("teacherList", teachers);
 			log.info("教师集合："+teachers);
 			return "admin/adminTeacherManage.jsp";

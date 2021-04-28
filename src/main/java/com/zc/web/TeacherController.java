@@ -640,7 +640,8 @@ public class TeacherController {
 		
 		return "teacher/main.jsp";
 	}
-	
+
+	//教师主页-课题管理-上传课题
 	@RequestMapping(value="/uploadThesisTitle",method=RequestMethod.POST)
 	public String teacherUploadThesisTitle(Model model,HttpServletRequest request,String thesisTitle,String nandu,String liang,String from,String leixing,String thesisDesc) throws Exception {
 		thesisTitle = new String(thesisTitle.getBytes("iso-8859-1"),"utf-8");
@@ -649,7 +650,6 @@ public class TeacherController {
 		from = new String(from.getBytes("iso-8859-1"),"utf-8");
 		leixing = new String(leixing.getBytes("iso-8859-1"),"utf-8");
 		thesisDesc = new String(thesisDesc.getBytes("iso-8859-1"),"utf-8");
-		
 		if(thesisTitle == null || "".equals(thesisTitle)) {
 			model.addAttribute("message", "上传课题题目不能为空");
 			return "teacher/main.jsp";
@@ -1424,25 +1424,22 @@ public class TeacherController {
 		teacherCheckThesisForm(request, model);
 		return "teacher/teacherCheckThesis.jsp";
 	}
-	
+
+	//教师-成绩管理-添加成绩
 	@RequestMapping(value="/showStudent4Pass")
 	public void teacherShowStudent4Pass(HttpServletResponse response, HttpServletRequest request,Model model) throws IOException {
 		Teacher currentTeacher = (Teacher)request.getSession().getAttribute("teacher");
 		int teacherId = currentTeacher.getId();
 		List<Student> allStudents = teacherService.getAllStudentInfo(teacherId);
-		
 		List<Student> student4pass = new ArrayList<Student>();
 		for(int i=0;i<allStudents.size();i++) {
 			int studentId = allStudents.get(i).getId();
 			ThesisInformation thesisInfor = teacherService.getInfoByStudentId(studentId);
-			
 			if(thesisInfor == null || "".equals(thesisInfor)||thesisInfor.getStatus()!=2) {
-				
 			}else {
 				student4pass.add(allStudents.get(i));
 			}
 		}
-		
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter write = response.getWriter();
 		write.write(JSONArray.toJSONString(student4pass));

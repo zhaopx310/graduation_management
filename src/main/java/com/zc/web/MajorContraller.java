@@ -25,11 +25,11 @@ public class MajorContraller {
 
 	@Autowired
 	private IMajorService majorService;
-	
+
+	//学生修改个人信息
 	@RequestMapping(value="/getAllMajor")
 	public String showAllMajor(HttpServletResponse response,HttpServletRequest request) throws Exception {
 		List<Major> majors = majorService.allMajor();
-		
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter write = response.getWriter();
 		write.write(JSONArray.toJSONString(majors));

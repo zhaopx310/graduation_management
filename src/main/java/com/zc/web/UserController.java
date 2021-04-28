@@ -52,7 +52,8 @@ public class UserController {
 	
 	@Autowired
 	private IMajorService majorService;
-	
+
+	//管理员登录
 	@RequestMapping(value="/admin/login")
 	public String adminLogin(String userNo,String password,Model model,HttpServletRequest request) {
 		User currentUser = userService.login(userNo, password);
@@ -61,22 +62,19 @@ public class UserController {
 			return "../../admin/adminLogin.jsp";
 		}
 		if(currentUser.getPermission()==3) {
-			// request.getSession().setAttribute("userNo", userNo);
 			HttpSession session = request.getSession();
 			session.setMaxInactiveInterval(3600);
-			
 			session.setAttribute("currentUser", currentUser);
-			//model.addAttribute("userNo", userNo);
 			return "admin/main.jsp";
 		}else {
-			model.addAttribute("message", "当前用户不是管理员");
+			model.addAttribute("message", "当前用户不是管理员,请用管理员用户登录");
 			return "../../admin/adminLogin.jsp";
 		}
 	}
-	
+
+	//教师登录
 	@RequestMapping(value="/teacher/login")
 	public String teacherLogin(String userNo,String password,Model model,HttpServletRequest request) {
-		
 		User currentUser = userService.login(userNo, password);
 		if("".equals(currentUser)||currentUser==null) {
 			model.addAttribute("message", "用户名或密码错误");
@@ -87,50 +85,42 @@ public class UserController {
 			session.setMaxInactiveInterval(3600);
 			// 在t_user表的信息
 			session.setAttribute("currentUser", currentUser);
-			
 			// 完整的teacher信息
 			Teacher teacher = teacherService.showInfoByNo(userNo);
 			int depId = teacher.getDepartmentId();
 			String depName = departmentService.getNameById(depId);
 			teacher.setDepartmentName(depName);
-			
 			session.setAttribute("teacher", teacher);
-			//model.addAttribute("userNo", userNo);
 			return "teacher/main.jsp";
 		}else {
-			model.addAttribute("message", "当前用户不是教师");
+			model.addAttribute("message", "当前用户不是教师,请用教师用户登录");
 			return "../../teacher/teacherLogin.jsp";
 		}
 	}
+
+
+	//学生登录
 	@RequestMapping(value="/student/login")
 	public String studentLogin(String userNo,String password,Model model,HttpServletRequest request) {
-		
 		User currentUser = userService.login(userNo, password);
-		log.info(currentUser);
 		if("".equals(currentUser)||currentUser==null) {
 			model.addAttribute("message", "用户名或密码错误");
-			//model.addAttribute("url", "../student/studentLogin.jsp");
-			//return "error.jsp";
 			return "../../student/studentLogin.jsp";
 		}
+		//判断权限 学生权限-1 教师权限-2 管理员权限-3
 		if(currentUser.getPermission()==1) {
 			HttpSession session = request.getSession();
 			session.setMaxInactiveInterval(3600);
 			// t_user 表中的关于学生的信息
 			session.setAttribute("currentUser", currentUser);
-			
 			// t_student 表中的信息
 			Student student = studentService.getStudentByNO(userNo);
-			int majorId = student.getMajorId();
-			String majorName = majorService.getNameById(majorId);
+			String majorName = majorService.getNameById(student.getMajorId());
 			student.setMajorName(majorName);
-			
 			session.setAttribute("student", student);
-			// model.addAttribute("userNo", userNo);
 			return "student/main.jsp";
 		}else {
-			model.addAttribute("message", "当前用户不是学生");
-			//return "error.jsp";
+			model.addAttribute("message", "当前用户不是学生,请用学生用户登录");
 			return "../../student/studentLogin.jsp";
 		}
 	}
